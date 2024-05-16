@@ -8,12 +8,13 @@ export default class ProductsManager{
         this.path = path;
     }
 
-    async getproducts(){
+    async getproducts(limit){
         try{//verificamos si existe el path
             //console.log(this.path); 
             if(fs.existsSync(this.path)){
                 const products = await fs.promises.readFile(this.path, "utf-8"); //si existe lo leo
                 const productsJS = JSON.parse(products) // lo parseo y lo retorno
+                if(limit) return productsJS.slice(0, limit);  //retorna el limit 
                 return productsJS
                 
             }else return []; //si no exist retorno un array vacio
@@ -27,6 +28,7 @@ export default class ProductsManager{
         try{
             const product = {
                 id: uuidv4(),
+                status: true,
                 ...obj,
             };
             const productsFile = await this.getproducts();

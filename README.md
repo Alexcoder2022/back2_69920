@@ -14,6 +14,7 @@ category:String
 thumbnails:Array de Strings que contengan las rutas donde están almacenadas las imágenes referentes a dicho producto
 La ruta PUT /:pid deberá tomar un producto y actualizarlo por los campos enviados desde body. NUNCA se debe actualizar o eliminar el id al momento de hacer dicha actualización.
 La ruta DELETE /:pid deberá eliminar el producto con el pid indicado. 
+
 Para el carrito, el cual tendrá su router en /api/carts/, configurar dos rutas:
 La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura:
 Id:Number/String (A tu elección, de igual manera como con los productos, debes asegurar que nunca se dupliquen los ids y que este se autogenere).

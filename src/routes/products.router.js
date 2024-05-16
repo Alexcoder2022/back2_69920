@@ -1,34 +1,30 @@
-import express, { response } from 'express';
-import ProductsManager from "./managers/productManager.js" //import la clase
+import { Router } from "express";
+import { productValidator } from "../middlewares/productValidator.js";
+const router = Router();
 
-const productManager = new ProductsManager("./products.json"); //instancia 
+import ProductsManager from "../managers/productManager.js" //import la clase
+const productManager = new ProductsManager("./src/data/products.json"); //instancia
+console.log(productManager)
 
-  
-const app = express();
-
-//middleware
-app.use(express.json()); // para recibir datos json
-app.use(express.urlencoded({extended: true})); //midd para datos q se envian x params 
-
-
-
+// reemplazo todos los app x router
 //dos grupos de rutas: /products y /carts
 
 //obtener los productos 
-app.get ("/products", async(req, res)=>{
+router.get ("/", async(req, res)=>{
     try { 
-        const products = await productManager.getproducts();
+        const { limit } = req.query;
+        const products = await productManager.getproducts(limit);
         res.status(200).json(products);    
     } catch (error) {
         console.log(error);
-        res.status(500).send(error.message); 
+        res.status(500).json({msg: error.message});
         
     }
 });
 
 //La ruta GET /:pid deberá traer sólo el producto con el id proporcionado
 
-app.get ('/products/:pid', async (req, res)=>{
+router.get ('/:pid', async (req, res)=>{
     try {
         const { pid } = req.params;
         const product = await productManager.getProductById(pid); 
@@ -36,13 +32,13 @@ app.get ('/products/:pid', async (req, res)=>{
         else res.status(200).json(product)
     } catch (error) {
         console.log(error);
-        res.status(500).send(error.message); 
+        res.status(500).json({msg: error.message});
     }
 });
 
 //La ruta raíz POST / deberá agregar un nuevo producto
 // obtener datos del producto 
-app.post ("/products", async(req, res)=>{
+router.post ("/", productValidator, async(req, res)=>{
     try {
         console.log(req.body); //Me llega un {}Vacio
         const product = await productManager.createproducts(req.body);
@@ -50,12 +46,12 @@ app.post ("/products", async(req, res)=>{
         else res.status(200).json(product);  
     } catch (error) {
         console.log(error);
-        res.status(500).send(error.message); 
+        res.status(500).json({msg: error.message});
     }
 })
 
 //La ruta PUT /:pid deberá tomar un producto y actualizarlo por los campos enviados desde body
-app.put("/products/:pid", async(req, res)=>{
+router.put("/:pid", async(req, res)=>{
     try {
         const { pid } = req.params;
         const response = await productManager.updateProduct(req.body, pid); 
@@ -64,13 +60,13 @@ app.put("/products/:pid", async(req, res)=>{
         
     } catch (error) {
         console.log(error);
-        res.status(500).send(error.message);
+        res.status(500).json({msg: error.message});
         
     }
 })
 
 //La ruta DELETE /:pid deberá eliminar el producto con el pid indicado. 
-app.delete("/products/:pid", async(req, res)=>{
+router.delete("/:pid", async(req, res)=>{
     try {
         const { pid } = req.params;
         const response = await productManager.deleteProduct(pid); 
@@ -80,14 +76,10 @@ app.delete("/products/:pid", async(req, res)=>{
 
     } catch (error) {
         console.log(error);
-        res.status(500).send(error.message);
+        res.status(500).json({msg: error.message});
         
     }
 
 });
 
-
-const PORT = 8080;
-
-app.listen(PORT, ()=> console.log(`servidor ok en ${PORT}` ));
-
+export default router;
