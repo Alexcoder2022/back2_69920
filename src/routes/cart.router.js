@@ -1,7 +1,11 @@
-import CartManager from "../managers/cartManager.js";
-import { __dirname } from "./path.js";
+import { Router } from "express";
+const router = Router();
 
-const cartManager = new CartManager(`${__dirname}/data/carts.json`);
+
+import CartManager from "../managers/cartManager.js";
+import { __dirname } from "../routes/path.js";  //archivo path.js tiene el dirname 
+
+const cartManager = new CartManager("./src/data/carts.json"); //preg??? la ruta para usar __dirname 
 
 router.post("/:idCart/product/:idProd", async (req, res, next)=>{
     try {
@@ -11,6 +15,8 @@ router.post("/:idCart/product/:idProd", async (req, res, next)=>{
     }
 })
 
+
+//crear un carrito 
 router.post("/", async (req,res)=>{
     try {
         res.json(await cartManager.createCart());
@@ -33,4 +39,6 @@ router.get ("/:idCart", async (req, res)=>{
         console.log(error); 
         
     }
-})
+});
+
+export default router;

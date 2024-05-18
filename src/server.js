@@ -1,5 +1,6 @@
 import express, { response } from 'express';
 import productsRouter from './routes/products.router.js';
+import cartRouter from './routes/cart.router.js';
 
 
   
@@ -10,8 +11,9 @@ app.use(express.json()); // para recibir datos json
 app.use(express.urlencoded({extended: true})); //midd para datos q se envian x params 
 
 //prefijo /products, ingresa al arouter de products => en el rauter alcanza con poner /, si no se duplica 
-app.use("/products", productsRouter); //routers 
-//app.use("/carts", cartsRouter);
+app.use("/api/products", productsRouter); //routers 
+app.use("/api/carts", cartRouter);
+
 
 
 

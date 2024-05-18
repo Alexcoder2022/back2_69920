@@ -1,4 +1,4 @@
-import { __dirname } from "../path.js";
+import { __dirname } from "../routes/path.js";
 import fs from 'fs';
 import { v4 as uuidv4 } from "uuid";
 
@@ -32,10 +32,10 @@ export default class CartManager {
                 id: uuidv4(),
                 products: [],
             }
-            const carts = await this.getAllCarts();
-            carts.push(cart);
+            const carts = await this.getAllCarts(); //traemos el array de carritos 
+            carts.push(cart); //le agrego el CARRITO CREADO 
             await fs.promises.writeFile(this.path, JSON.stringify(carts));
-            return cart; 
+            return cart; //RETORNO EL CARRITO => siempre hay q retornar para que nos muestre 
 
         } catch (error) {
             console.log(error)
