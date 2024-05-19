@@ -49,7 +49,7 @@ export default class ProductsManager{
         try {
             const products = await this.getproducts();
             const productExist = products.find((p)=>p.id === id);
-            if(!productExist) return null
+            if(!productExist) return null;
             return productExist;
 
         } catch (error) {

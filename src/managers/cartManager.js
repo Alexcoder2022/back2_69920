@@ -47,35 +47,55 @@ export default class CartManager {
             const carts = await this.getAllCarts();
             const cart = carts.find((c)=> c.id === id ); 
             if (!cart) return null ;
-            
+            return cart;
+            console.log(cart);
         } catch (error) {
             console.log (error)
             
         }
     }
 
+     async getProductById(id){
+        try {
+            const products = await this.getproducts();
+            const productExist = products.find((p)=>p.id === id);
+            if(!productExist) return null;
+            return productExist;
+
+        } catch (error) {
+            console.log(error); 
+        }
+    }
+
+    //agregar un producto al carrito 
+    // recibe id del carrito y id producto 
     async saveProductToCart(idCart, idProduct) {
         try {
-            const productExist = await productManager.getProductById(idProduct); 
-            if(!productExist) throw new Error ('product not exist ');
-            let carts = await this.getAllCarts();
-            const cartExist = await this.getCartById(idCart); 
-            if (!cartExist) throw new Error ('cart not found '); 
+            const productExist = await productManager.getProductById(idProduct); //ver si existe el prod 
+            console.log(` productExist ${productExist}`); // por que me devuelve null ??????
+            if(!productExist) throw new Error ('product not exist '); // si no exist arrojamos un error 
+            let carts = await this.getAllCarts(); //traemos todos los carritos 
+            console.log(carts);
+            const cartExist = await this.getCartById(idCart); //busco un carrito x id 
+            if (!cartExist) throw new Error ('cart not found '); // si no existe  
+            // ver si el producto existe dentro del carrito sumo la cantidad 
+            console.log(cartExist);
             const existProdInCart = cartExist.products.find((prod)=> prod.product === idProduct); 
-            if(!existProdInCart){
+            if(!existProdInCart){ // si no existe en el carrito lo guardo 
                 const prod = {
                     product : idProduct, 
                     quantity:1
                 };
-                cartExist.products.push(prod);
+                cartExist.products.push(prod); // al id del carrito le agrego el prodructo 
+                
 
-            }else existProdInCart.quantity += 1;
-            const updateCarts = carts.map((cart)=>{
-                if(cart.id === idCart)return cartExist
-                return cart
+            }else existProdInCart.quantity += 1; // si el prod existe dentro del carrito le agrego 1 y lo actualizo
+            const updateCarts = carts.map((cart)=>{ // recorro el array de carritos, 
+                if(cart.id === idCart)return cartExist  // si el id carrito actual coincide con el id del actualizado devol el carrito actualizado
+                return cart //si no coincide no se modifican 
             })
             await fs.promises.writeFile(this.path, JSON.stringify(updateCarts));
-            return cartExist
+            return cartExist // retorno el carrito actualizado 
         } catch (error) {
             
         }

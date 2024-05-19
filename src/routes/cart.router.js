@@ -1,4 +1,5 @@
 import { Router } from "express";
+//import { middError } from "../middlewares/midd.error.js"; 
 const router = Router();
 
 
@@ -7,16 +8,24 @@ import { __dirname } from "../routes/path.js";  //archivo path.js tiene el dirna
 
 const cartManager = new CartManager("./src/data/carts.json"); //preg??? la ruta para usar __dirname 
 
+
+// agregar productos al array de productos 
+
 router.post("/:idCart/product/:idProd", async (req, res, next)=>{
     try {
-        
+        const {idCart} = req.params;
+        const {idProd} = req.params;
+        const resp = await cartManager.saveProductToCart(idCart, idProd);
+        res.json(resp);
+        console.log(resp);
+
     } catch (error) {
-        
+        next(error); 
     }
-})
+});
 
 
-//crear un carrito 
+//crear un carrito => funciona bien 
 router.post("/", async (req,res)=>{
     try {
         res.json(await cartManager.createCart());
@@ -30,10 +39,13 @@ router.post("/", async (req,res)=>{
 
 })
 
+//buscar carrito por id, buscamos el id proporcinado con getCartById()
+//funciona bien 
+
 router.get ("/:idCart", async (req, res)=>{
     try {
         const { idCart } = req.params
-        res.json (await cartManager.getCartById(idCart))
+        res.json(await cartManager.getCartById(idCart))
         
     } catch (error) {
         console.log(error); 

@@ -4,7 +4,7 @@ const router = Router();
 
 import ProductsManager from "../managers/productManager.js" //import la clase
 const productManager = new ProductsManager("./src/data/products.json"); //instancia
-console.log(productManager)
+
 
 // reemplazo todos los app x router
 //dos grupos de rutas: /products y /carts
