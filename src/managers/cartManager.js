@@ -2,8 +2,9 @@ import { __dirname } from "../routes/path.js";
 import fs from 'fs';
 import { v4 as uuidv4 } from "uuid";
 
-import ProductsManager from "./productManager.js";
-const productManager = new ProductsManager(`${__dirname}/data/products.json`); 
+import ProductsManager from "./productManager.js"
+const productManager = new ProductsManager("./src/data/products.json"); //mal usado el dirname 
+console.log(`cartManager.js ${productManager}`);
 
 
 export default class CartManager {
@@ -16,11 +17,13 @@ export default class CartManager {
             if(fs.existsSync(this.path)){
                 const carts = await fs.promises.readFile(this.path, "utf-8");
                 const cartsJS = JSON.parse(carts);
+                console.log(cartsJS);
                 return cartsJS;
             }else return [];
 
         } catch (error) {
-            console.log(error)
+            console.error('Error reading carts:', error);
+            throw error;
         }
     }
 
@@ -55,35 +58,23 @@ export default class CartManager {
         }
     }
 
-     async getProductById(id){
-        try {
-            const products = await this.getproducts();
-            const productExist = products.find((p)=>p.id === id);
-            if(!productExist) return null;
-            return productExist;
-
-        } catch (error) {
-            console.log(error); 
-        }
-    }
-
     //agregar un producto al carrito 
     // recibe id del carrito y id producto 
-    async saveProductToCart(idCart, idProduct) {
+    async saveProductToCart(idCart, idProd) {
         try {
-            const productExist = await productManager.getProductById(idProduct); //ver si existe el prod 
-            console.log(` productExist ${productExist}`); // por que me devuelve null ??????
+            const productExist = await productManager.getProductById(idProd); //ver si existe el prod 
+            console.log(`productExist ${productExist}`); // por que me devuelve null ??????
             if(!productExist) throw new Error ('product not exist '); // si no exist arrojamos un error 
             let carts = await this.getAllCarts(); //traemos todos los carritos 
-            console.log(carts);
+            
             const cartExist = await this.getCartById(idCart); //busco un carrito x id 
             if (!cartExist) throw new Error ('cart not found '); // si no existe  
             // ver si el producto existe dentro del carrito sumo la cantidad 
-            console.log(cartExist);
-            const existProdInCart = cartExist.products.find((prod)=> prod.product === idProduct); 
+            
+            const existProdInCart = cartExist.products.find((prod)=> prod.product === idProd); 
             if(!existProdInCart){ // si no existe en el carrito lo guardo 
                 const prod = {
-                    product : idProduct, 
+                    product : idProd, 
                     quantity:1
                 };
                 cartExist.products.push(prod); // al id del carrito le agrego el prodructo 
@@ -97,7 +88,7 @@ export default class CartManager {
             await fs.promises.writeFile(this.path, JSON.stringify(updateCarts));
             return cartExist // retorno el carrito actualizado 
         } catch (error) {
-            
+            console.log(error); 
         }
     }
 

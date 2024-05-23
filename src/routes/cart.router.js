@@ -1,9 +1,10 @@
 import { Router } from "express";
-//import { middError } from "../middlewares/midd.error.js"; 
+import { middError } from "../middlewares/midd.error.js"; 
 const router = Router();
 
-
 import CartManager from "../managers/cartManager.js";
+
+
 import { __dirname } from "../routes/path.js";  //archivo path.js tiene el dirname 
 
 const cartManager = new CartManager("./src/data/carts.json"); //preg??? la ruta para usar __dirname 
@@ -11,7 +12,7 @@ const cartManager = new CartManager("./src/data/carts.json"); //preg??? la ruta 
 
 // agregar productos al array de productos 
 
-router.post("/:idCart/product/:idProd", async (req, res, next)=>{
+router.post("/:idCart/products/:idProd", async (req, res, next)=>{
     try {
         const {idCart} = req.params;
         const {idProd} = req.params;

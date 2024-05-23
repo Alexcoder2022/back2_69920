@@ -1,6 +1,8 @@
-import express, { response } from 'express';
+import express from 'express';
 import productsRouter from './routes/products.router.js';
 import cartRouter from './routes/cart.router.js';
+import { __dirname } from './routes/path.js';
+
 
 
   
