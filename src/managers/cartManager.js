@@ -1,4 +1,4 @@
-import { __dirname } from "../routes/path.js";
+import { __dirname } from '../path.js'; 
 import fs from 'fs';
 import { v4 as uuidv4 } from "uuid";
 

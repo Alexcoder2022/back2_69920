@@ -64,7 +64,7 @@ export default class ProductsManager{
             if(!productExist) return null;
             productExist = {...productExist, ...obj}; 
             const newArray = productsFile.filter((p)=> p.id !== id);//sacamos el producto q encontramos y generamos newAR
-            newArray.push(productExist); //le pusheo el produc nuevo
+             newArray.push(productExist); //le pusheo el produc nuevo
             await fs.promises.writeFile(this.path, JSON.stringify(newArray));
             return productExist;
         } catch (error) {

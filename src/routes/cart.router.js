@@ -5,7 +5,7 @@ const router = Router();
 import CartManager from "../managers/cartManager.js";
 
 
-import { __dirname } from "../routes/path.js";  //archivo path.js tiene el dirname 
+import { __dirname } from "../path.js";  //archivo path.js tiene el dirname 
 
 const cartManager = new CartManager("./src/data/carts.json"); //preg??? la ruta para usar __dirname 
 

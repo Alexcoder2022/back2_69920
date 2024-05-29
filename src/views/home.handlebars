@@ -1,0 +1,25 @@
+{{!-- vista que va a renderizar un endpoint  --}}
+
+<h2>Mi primer vista </h2>
+{{#if products.length}}
+    <ul>
+        {{#each products}}
+        <div>
+            <li>Id: {{this.id}}</li>
+            <li>Status: {{this.status}}</li>
+            <li>Title: {{this.title}}</li>
+            <li>Description: {{this.description}}</li>
+            <li>Code: {{this.code}}</li>
+            <li>Price $:{{this.price}}</li>
+            <li>Stock: {{this.stock}}</li>
+            <li>Category: {{this.category}}</li>
+            
+            <br>
+        </div>
+        
+        {{/each}}
+
+    </ul>
+{{else}}
+    <p>No se han encontrado productos</p>
+{{/if}}
