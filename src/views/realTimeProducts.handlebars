@@ -1,6 +1,32 @@
 {{!-- <h2>lista que trabajara con websocket </h2>
 <h3>cada vez que creemos o eliminemos el producto debe actualizar automaticamente </h3> --}}
 
+<fieldset id="createProduct"> 
+    <legend>Crear Productos </legend>
+    <form id="form">
+        <input type="text" id="title" placeholder="Ingrese un Título" required>
+        <input type="text" id="description" placeholder="Ingrese Descripción" required>
+        <input type="text" id="Code" placeholder="Ingrese Código" required>
+        <input type="number" id="price" placeholder="Ingrese el precio" required>
+        <input type="number" id="stock" placeholder="Ingrese el stock" required>
+        <input type="text" id="Category" placeholder="Ingrese la categoria" required>
+        <input type="file" id="img" >
+        <input type="submit" id="submit" value="AGREGAR">
+
+    </form>
+
+</fieldset>
+
+<fieldset> 
+    <legend>Lista de Productos </legend>
+    <ul id="products"></ul>
+
+</fieldset>
+
+
+
+
 {{!-- Habilita la conexión del cliente con eñ servidor  --}}
 <script src="/socket.io/socket.io.js"></script>  
 <script src="js/index.js"></script>
+

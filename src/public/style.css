@@ -1,3 +1,38 @@
 h1 {
     color: red ;
 }
+#createProduct{
+    
+    width: 70%;
+}
+#form{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    font-size: 15px;
+    width: 30%;
+     
+}
+input{
+    width: auto;
+    padding: 8px;
+    margin: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+    font-size: 15px;
+    font-family: sans-serif;
+    font-weight: 100;
+    color: #333;
+    background-color: #fff;
+    
+
+}
+#submit{
+    background-color: blue;
+    color: black;
+    font-size: 25px;
+    width: 50%;
+
+}

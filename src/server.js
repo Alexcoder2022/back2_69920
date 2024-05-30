@@ -26,7 +26,7 @@ app.use('/', viewsRouter); //enrutador de vistas
 app.use("/api/products", productsRouter); //routers 
 app.use("/api/carts", cartRouter);
 
-//ruta que apunta a la platilla de webSocket 
+//ruta que apunta a la plantilla de webSocket 
 app.get("/realTimeProducts", (req, res)=>{
     res.render("realTimeProducts")
 })
@@ -40,7 +40,22 @@ const httpServer = app.listen(PORT, ()=> console.log(`servidor ok en ${PORT}` ))
 // instanciamos la clase server 
 const socketServer = new Server (httpServer); 
 
+//array para guardar los productos 
+const products = []; 
+
 socketServer.on('connection', (socket)=>{
-    console.log(`nuevo cliente conectado ${socket.id}`)
+    console.log(`Nuevo cliente conectado ${socket.id}`);
+
+    socket.on('disconnect', ()=>{
+     console.log(`Cliente desconectado`);
+    })
+
+    socket.on('newProduct', (product)=>{
+        products.push(product)
+        socketServer.emit('newProduct', product);
+
+    })
 })
+
+
 
