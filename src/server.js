@@ -33,7 +33,7 @@ app.get("/realTimeProducts", (req, res)=>{
 
 
 
-const PORT = 8081;
+const PORT = 8085;
 
 const httpServer = app.listen(PORT, ()=> console.log(`servidor ok en ${PORT}` ));
 
@@ -52,7 +52,7 @@ socketServer.on('connection', (socket)=>{
 
     socket.on('newProduct', (product)=>{
         products.push(product)
-        socketServer.emit('newProduct', product);
+        socketServer.emit('products', products);
 
     })
 })

@@ -4,15 +4,14 @@ const socket = io();
 const form = document.getElementById('form');
 const inputTitle = document.getElementById('title');
 const inputDescription = document.getElementById('description');
-const inputCode = document.getElementById('cede');
+const inputCode = document.getElementById('code');
 const inputPrice = document.getElementById('price');
 const inputStock = document.getElementById('stock');
 const inputCategory = document.getElementById('category');
-const inputImage = document.getElementById('img');
 
 const productsList = document.getElementById('products');
 
-form.addEventListener("click",(e)=>{
+form.onsubmit = (e)=>{
     console.log("hizo click")
     e.preventDefault();
     const title =  inputTitle.value; 
@@ -21,7 +20,7 @@ form.addEventListener("click",(e)=>{
     const price = inputPrice.value;
     const stock = inputStock.value;
     const category = inputCategory.value;
-    const image = inputImage.value;
+    
     const product = {
         title,
         description,
@@ -29,40 +28,34 @@ form.addEventListener("click",(e)=>{
         price,
         stock,
         category,
-
-    }
-       
+    };
+    console.log(product);
+    socket.emit('newProduct', product);
+    form.reset();
     
-    socket.emit('newProduct', product);
-    form.reset();
-
-
-})
-
-form.onsubmit =(e)=>{
-    e.preventDefault();
-    //console.log(title.value, description.value, code.value, price.value, stock.value, category.value, image.value);
-    const product = {
-        title: title.value,
-        description: description.value,
-        code: code.value,
-        price: price.value,
-        stock: stock.value,
-        category: category.value,
-        image: image.value
-    }
-    socket.emit('newProduct', product);
-    form.reset();
+    
 }
+
 socket.on('products', (products)=>{
-    productsList.innerHTML = '';
-    products.forEach(product => {
-        const li = document.createElement('li');
-        li.textContent = product.title;
-        productsList.appendChild(li);
-    });
+   let infoProducts  = ""; 
+   products.forEach((prod)=>{
+    infoProducts += `<div class="card" style="width: 18rem;">
+    
+        <div class="card-body">
+        <h5 class="card-title">${prod.title}</h5>
+        <h5 class="card-text"> PRECIO: $ ${prod.price}</h5>
+        <p class="card-text">DESCRIPCIÓN: ${prod.description}</p>
+        <p class="card-text">STOCK: ${prod.stock}</p>
+        <p class="card-text">CATEGORIA: ${prod.category}</p>
+        </div>
+    </div>`;
+   
+
+   });
+   productsList.innerHTML = infoProducts;
     
 })
+
 
 
 
