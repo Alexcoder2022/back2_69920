@@ -4,10 +4,12 @@ import cartRouter from './routes/cart.router.js';
 import { __dirname } from './path.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
-import { Server } from 'socket.io'
+import { Server } from 'socket.io';
+import ProductsManager from './managers/productManager.js';
+
+const productManager = new ProductsManager("./src/data/products.json");
 
 
-  
 const app = express();
 
 //middleware
@@ -40,21 +42,22 @@ const httpServer = app.listen(PORT, ()=> console.log(`servidor ok en ${PORT}` ))
 // instanciamos la clase server 
 const socketServer = new Server (httpServer); 
 
-//array para guardar los productos 
-const products = []; 
-
-socketServer.on('connection', (socket)=>{
+socketServer.on('connection', async(socket)=>{
     console.log(`Nuevo cliente conectado ${socket.id}`);
 
     socket.on('disconnect', ()=>{
      console.log(`Cliente desconectado`);
     })
+    
 
-    socket.on('newProduct', (product)=>{
-        products.push(product)
-        socketServer.emit('products', products);
+    socket.on('newProduct', async(product)=>{
+       await productManager.createproducts(product)
+        socketServer.emit('products', await productManager.getproducts());
+ 
+    }) 
 
-    })
+
+
 })
 
 

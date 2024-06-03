@@ -47,6 +47,7 @@ socket.on('products', (products)=>{
         <p class="card-text">DESCRIPCIÓN: ${prod.description}</p>
         <p class="card-text">STOCK: ${prod.stock}</p>
         <p class="card-text">CATEGORIA: ${prod.category}</p>
+        <button type="button" class="btn btn-danger" id="btnEliminar">ELIMINAR</button>
         </div>
     </div>`;
    
