@@ -9,8 +9,7 @@ export default class ProductsManager{
     }
 
     async getproducts(limit){
-        try{//verificamos si existe el path
-            //console.log(this.path); 
+        try{
             if(fs.existsSync(this.path)){
                 const products = await fs.promises.readFile(this.path, "utf-8"); //si existe lo leo
                 const productsJS = JSON.parse(products) // lo parseo y lo retorno
@@ -24,7 +23,8 @@ export default class ProductsManager{
     }
 
     //crear los productos 
-    async createproducts(obj){   // no me genera el id ??????????
+    async createproducts(obj){  
+        
         try{
             const product = {
                 id: uuidv4(),

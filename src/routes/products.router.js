@@ -3,6 +3,7 @@ import { productValidator } from "../middlewares/productValidator.js";
 const router = Router();
 
 import ProductsManager from "../managers/productManager.js" //import la clase
+import { idValidator } from "../middlewares/id.validator.js";
 const productManager = new ProductsManager("./src/data/products.json"); //instancia
 
 
@@ -40,7 +41,7 @@ router.get ('/:pid', async (req, res)=>{
 // obtener datos del producto 
 router.post ("/", productValidator, async(req, res)=>{
     try {
-        console.log(req.body); //Me llega un {}Vacio
+        console.log(req.body); 
         const product = await productManager.createproducts(req.body);
         if(!product) res.status(404).json({msg: 'product already exist!'}); //si dev null => dev prod exist
         else res.status(200).json(product);  
@@ -51,9 +52,10 @@ router.post ("/", productValidator, async(req, res)=>{
 })
 
 //La ruta PUT /:pid deberá tomar un producto y actualizarlo por los campos enviados desde body
-router.put("/:pid", async(req, res)=>{
+router.put("/:pid", idValidator, async(req, res)=>{
     try {
         const { pid } = req.params;
+        
         const response = await productManager.updateProduct(req.body, pid); 
         if(!response) res.status(404).json({msg: "error updating product"});
         else res.status(200).json(response)

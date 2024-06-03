@@ -1,5 +1,19 @@
 
 export const productValidator = (req, res, next) => {
+   
+    const { title, description, code, price, stock, category}= req.body;
+   
+
+    const valProduct = {
+        title,
+        description,
+        code,
+        price,
+        stock,
+        category,
+    }
+
+    req.body = valProduct; 
     if (
         req.body.title === undefined ||
         req.body.description === undefined ||
