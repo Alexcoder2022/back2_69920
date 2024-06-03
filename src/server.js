@@ -44,6 +44,7 @@ const socketServer = new Server (httpServer);
 
 socketServer.on('connection', async(socket)=>{
     console.log(`Nuevo cliente conectado ${socket.id}`);
+    socketServer.emit('products', await productManager.getproducts());
 
     socket.on('disconnect', ()=>{
      console.log(`Cliente desconectado`);
@@ -51,10 +52,26 @@ socketServer.on('connection', async(socket)=>{
     
 
     socket.on('newProduct', async(product)=>{
-       await productManager.createproducts(product)
-        socketServer.emit('products', await productManager.getproducts());
+        try {
+            await productManager.createproducts(product)
+            socketServer.emit('products', await productManager.getproducts());
+            
+        } catch (error) {
+            console.error(`error creating the product ${error.message}`)
+        }
+       
  
     }) 
+
+    socket.on('deleteProduct',async(id)=>{
+        try {
+            await productManager.deleteProduct(id);
+            socketServer.emit('products', await productManager.getproducts());
+        } catch (error) {
+            console.error(`error deleting the product ${error.message}`)
+        }
+       
+    })
 
 
 
