@@ -52,7 +52,7 @@ socket.on('products', (products)=>{
         <h5 class="card-text"> PRECIO: $ ${prod.price}</h5>
         
 
-        <button type="button" class="btn btn-danger" id="btnEliminar">ELIMINAR</button>
+        <button type="button" class="btn btn-danger" >ELIMINAR</button>
         </div>
     </div>`;
    

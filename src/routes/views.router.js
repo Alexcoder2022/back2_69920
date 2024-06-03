@@ -7,7 +7,7 @@ const router = Router();
 import ProductsManager from '../managers/productManager.js';
 const managers = new ProductsManager(`${__dirname}/data/products.json`);
 
-router.get("/", async(req, res)=>{
+router.get("/products", async(req, res)=>{
     const products = await managers.getproducts();
     console.log(products); 
     res.render('home', { products })  //nombre de la plantilla 
