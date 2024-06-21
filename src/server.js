@@ -5,7 +5,15 @@ import { __dirname } from './path.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
 import { Server } from 'socket.io';
-import ProductsManager from './managers/productManager.js';
+import ProductsManager from './daos/productFSManager.js';
+import { middError } from './middlewares/midd.error.js';
+import { initMongoDB } from './db/database.js';  //conexion a la base Datos 
+
+
+
+initMongoDB();
+
+
 
 const productManager = new ProductsManager("./src/data/products.json");
 
@@ -28,6 +36,8 @@ app.use('/', viewsRouter); //enrutador de vistas
 app.use("/api/products", productsRouter); //routers 
 app.use("/api/carts", cartRouter);
 
+app.use(middError); //siempre despues del enrutador 
+
 //ruta que apunta a la plantilla de webSocket 
 app.get("/realTimeProducts", (req, res)=>{
     res.render("realTimeProducts")
@@ -44,7 +54,7 @@ const socketServer = new Server (httpServer);
 
 socketServer.on('connection', async(socket)=>{
     console.log(`Nuevo cliente conectado ${socket.id}`);
-    socketServer.emit('products', await productManager.getproducts());
+    socketServer.emit('products', await productManager.getAll());
 
     socket.on('disconnect', ()=>{
      console.log(`Cliente desconectado`);
@@ -53,8 +63,8 @@ socketServer.on('connection', async(socket)=>{
 
     socket.on('newProduct', async(product)=>{
         try {
-            await productManager.createproducts(product)
-            socketServer.emit('products', await productManager.getproducts());
+            await productManager.create(product)
+            socketServer.emit('products', await productManager.getAll());
             
         } catch (error) {
             console.error(`error creating the product ${error.message}`)
@@ -65,8 +75,8 @@ socketServer.on('connection', async(socket)=>{
 
     socket.on('deleteProduct',async(id)=>{
         try {
-            await productManager.deleteProduct(id);
-            socketServer.emit('products', await productManager.getproducts());
+            await productManager.delete(id);
+            socketServer.emit('products', await productManager.getAll());
         } catch (error) {
             console.error(`error deleting the product ${error.message}`)
         }

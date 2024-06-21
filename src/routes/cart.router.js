@@ -1,57 +1,34 @@
 import { Router } from "express";
-import { middError } from "../middlewares/midd.error.js"; 
+import * as controllers from '../controllers/carts.controllers.js'
+
 const router = Router();
 
-import CartManager from "../managers/cartManager.js";
+import CartManager from "../daos/cartFSManager.js";
 
 
-import { __dirname } from "../path.js";  //archivo path.js tiene el dirname 
+import { __dirname } from "../path.js";  
 
 const cartManager = new CartManager("./src/data/carts.json"); //preg??? la ruta para usar __dirname 
 
 
-// agregar productos al array de productos 
+router.post("/:idCart/products/:idProd", controllers.update);
 
-router.post("/:idCart/products/:idProd", async (req, res, next)=>{
-    try {
-        const {idCart} = req.params;
-        const {idProd} = req.params;
-        const resp = await cartManager.saveProductToCart(idCart, idProd);
-        res.json(resp);
-        console.log(resp);
+router.post("/", controllers.create); //Funciona Bien!
 
-    } catch (error) {
-        next(error); 
-    }
-});
+router.get ("/:id", controllers.getById );// funciona 
 
+router.put("/:id", controllers.update);
 
-//crear un carrito => funciona bien 
-router.post("/", async (req,res)=>{
-    try {
-        res.json(await cartManager.createCart());
+router.delete("/:id", controllers.remove);//funciona 
 
-    }catch (error){
-        res.status(500).json(error.message); 
-        console.log(error);
+router.delete("/:idCart/products/:idProd", controllers.removeProdToCart);
 
-    }
+router.post("/:idCart/products/:idProd", controllers.saveProductToCart);
+
+router.put("/:idCart/products/:idProd", controllers.updateProdQuantityToCart);
+
+router.delete("/clear/:idCart", controllers.clearCart); //no func
 
 
-})
-
-//buscar carrito por id, buscamos el id proporcinado con getCartById()
-//funciona bien 
-
-router.get ("/:idCart", async (req, res)=>{
-    try {
-        const { idCart } = req.params
-        res.json(await cartManager.getCartById(idCart))
-        
-    } catch (error) {
-        console.log(error); 
-        
-    }
-});
 
 export default router;

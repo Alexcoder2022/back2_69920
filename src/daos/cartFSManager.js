@@ -2,8 +2,9 @@ import { __dirname } from '../path.js';
 import fs from 'fs';
 import { v4 as uuidv4 } from "uuid";
 
-import ProductsManager from "./productManager.js"
-const productManager = new ProductsManager("./src/data/products.json"); //mal usado el dirname 
+import ProductsManager from "./productFSManager.js"
+//const productManager = new ProductsManager("./src/data/products.json"); //mal usado el dirname 
+const productManager = new ProductsManager(`${__dirname}/data/products.json`)
 console.log(`cartManager.js ${productManager}`);
 
 
@@ -12,12 +13,12 @@ export default class CartManager {
         this.path = path
     }
 
-    async getAllCarts(){
+    async getAll(){
         try {
             if(fs.existsSync(this.path)){
                 const carts = await fs.promises.readFile(this.path, "utf-8");
                 const cartsJS = JSON.parse(carts);
-                console.log(cartsJS);
+                //console.log(cartsJS);
                 return cartsJS;
             }else return [];
 
@@ -29,13 +30,13 @@ export default class CartManager {
 
     //crear un nuevo carrito, cuando lo creamos viene vacio 
 
-    async createCart(){
+    async create(){
         try {
             const cart = {
                 id: uuidv4(),
                 products: [],
             }
-            const carts = await this.getAllCarts(); //traemos el array de carritos 
+            const carts = await this.getAll(); //traemos el array de carritos 
             carts.push(cart); //le agrego el CARRITO CREADO 
             await fs.promises.writeFile(this.path, JSON.stringify(carts));
             return cart; //RETORNO EL CARRITO => siempre hay q retornar para que nos muestre 
@@ -45,29 +46,33 @@ export default class CartManager {
         }
     }
 
-    async getCartById(id){
+    async getById(id){
         try {
-            const carts = await this.getAllCarts();
+            const carts = await this.getAll();
+            
             const cart = carts.find((c)=> c.id === id ); 
             if (!cart) return null ;
+            console.log(cart)
             return cart;
-            console.log(cart);
+            
+            
         } catch (error) {
             console.log (error)
             
         }
     }
 
+
     //agregar un producto al carrito 
     // recibe id del carrito y id producto 
     async saveProductToCart(idCart, idProd) {
         try {
-            const productExist = await productManager.getProductById(idProd); //ver si existe el prod 
+            const productExist = await productManager.getAll(idProd); //ver si existe el prod 
             console.log(`productExist ${productExist}`); // por que me devuelve null ??????
             if(!productExist) throw new Error ('product not exist '); // si no exist arrojamos un error 
-            let carts = await this.getAllCarts(); //traemos todos los carritos 
+            let carts = await this.getAll(); //traemos todos los carritos 
             
-            const cartExist = await this.getCartById(idCart); //busco un carrito x id 
+            const cartExist = await this.getById(idCart); //busco un carrito x id 
             if (!cartExist) throw new Error ('cart not found '); // si no existe  
             // ver si el producto existe dentro del carrito sumo la cantidad 
             
@@ -94,3 +99,5 @@ export default class CartManager {
 
 
 }
+
+//ver el map
