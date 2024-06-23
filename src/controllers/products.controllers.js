@@ -4,8 +4,8 @@ import * as service from '../services/product.services.js';
 
 export const getAll = async(req, res,next)=>{
     try { 
-        const { page, limit, category, stock, sort } = req.query;  
-        const products = await service.getAll(page, limit, category, stock, sort);
+        const { page, limit, category, sort } = req.query;  
+        const products = await service.getAll(page, limit, category, sort);
         const nextLink = products.hasNextPage ? `http://localhost:8085/api/products?page=${products.nextPage}`: null;
         const prevLink = products.hasPrevPage ? `http://localhost:8085/api/products?page=${products.prevPage}`: null;
         res.status(200).json({

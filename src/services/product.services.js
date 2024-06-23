@@ -11,9 +11,9 @@ import ProductsManager from '../daos/productFSManager.js'; //dao de FS productMa
 const productDao = new ProductsManager(`${__dirname}/data/products.json`); */
 
 
-export const getAll = async (page, limit, category, stock, sort) =>{
+export const getAll = async (page, limit, category, sort) =>{
     try {
-        return await productDao.getAll(page, limit, category, stock, sort);
+        return await productDao.getAll(page, limit, category, sort);
     } catch (error) {
         throw new Error (error); 
     }
