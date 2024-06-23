@@ -38,9 +38,9 @@ export const getById = async (id) => {
 
 export const create = async () => {
     try {
-        const newcart = await cartDao.create({products: []});
-        if (!newcart) return false;
-        else return newcart;
+        const newCart = await cartDao.create({products: []});
+        if (!newCart) return false;
+        else return newCart;
     } catch (error) {
         throw new Error(error);
     }
@@ -55,9 +55,9 @@ export const remove = async (id) => {
     }
   };
 
-export const update = async (obj, id) => {
+export const update = async (id, obj) => {
     try {
-        return await cartDao.update(obj, id); 
+        return await cartDao.update(id, obj); 
     } catch (error) {
         throw new Error(error);
     }
@@ -65,7 +65,7 @@ export const update = async (obj, id) => {
 
 export const saveProductToCart = async (idCart, idProd) =>{
     try {
-        const prodExist = await productDao.getById(idProd);  //ver esta linea=> llamar al dao ??
+        const prodExist = await productDao.getById(idProd);  
         if(!prodExist) return null;
 
         const cartExist = await getById(idCart);
@@ -84,17 +84,30 @@ export const removeProductToCart = async (idCart, idProd) =>{
     try {
         const cartExist = await getById(idCart);
         if (!cartExist) return null;
-        const existProdInCart = cartExist.products.findIndex(prod => prod.product.toString() === idProd);
-        if (existProdInCart!== -1){
-            if(cartExist.products[existProdInCart].quantity === 1) cartExist.products.splice(existProdInCart, 1);
-            else cartExist.products[existProdInCart].quantity -= 1;
-        }
+
+        const existProdInCart = await cartDao.existProdInCart(idCart, idProd);
+        console.log(existProdInCart);
+        if (!existProdInCart) return null;
+          
+        
         return await cartDao.removeProductToCart(idCart, idProd);
     }catch (error){
         throw new Error(error);
 
     }    
 
+}
+
+export const updateProdQuantityToCart = async (idCart, idProd, quantity) => {
+    try {
+        const cartExist = await getById(idCart);
+        if (!cartExist) return null;
+        const existProdInCart = await cartDao.existProdInCart(idCart, idProd);
+        if (!existProdInCart) return null;
+        return await cartDao.updateProdQuantityToCart(idCart, idProd, quantity);
+    } catch (error) {
+        throw new Error(error);
+    }
 }
 export const clearCart = async (idCart) => {
     try {

@@ -14,7 +14,7 @@ export default class CartDBManager{
 
     async getById(id) {
         try {
-            return await CartModel.findById(id). populate("products.product"); 
+            return await CartModel.findById(id).populate("products.product"); 
             // le agregamos el populate e ingresamos a products.product 
             // products: es el array y product es el id del producto
         
@@ -25,19 +25,17 @@ export default class CartDBManager{
 
     async create() {
         try {
-            return await CartModel.create({products:[]});
-            
+          return await CartModel.create({products:[]});
         } catch (error) {
-            throw new Error(error);
+          throw new Error(error);
         }
     }
 
     async delete(id) {
         try {
-            return await CartModel.findByIdAndDelete(id);
-        
-        } catch (error) {
-            throw new Error(error);
+          return await CartModel.findByIdAndDelete(id);
+        }catch (error) {
+          throw new Error(error);
         }
     }
 
@@ -47,10 +45,7 @@ export default class CartDBManager{
             _id: idCart,
             products: { $elemMatch: { product: idProd } }
           });
-          // return await CartModel.findOne(
-          //   { _id: cartId, 'products.product': prodId }
-          // )
-        } catch (error) {
+        }catch (error) {
           throw new Error(error);
         }
     }
@@ -66,7 +61,7 @@ export default class CartDBManager{
         } catch (error) {
           console.log(error);
         }
-      }
+    }
     
 
 
@@ -85,26 +80,20 @@ export default class CartDBManager{
             { $push: { products: { product: idProd } } },
             { new: true }
           )
-        }
-            
-        } catch (error) {
-            throw new Error(error);
+        }    
+        }catch(error) {
+          throw new Error(error);
         }
     } 
-
-
-
-
-        async update(id, obj) {
+    async update(id, obj) {
             try {
-                return await CartModel.findByIdAndUpdate(id, obj, {new: true});
-                
-            } catch (error) {
-                throw new Error(error);
+              return await CartModel.findByIdAndUpdate(id, obj, {new: true});
+            }catch (error) {
+              throw new Error(error);
             }
-        }
+    }
 
-        async updateProdQuantityToCart(idCart, idProd, quantity) {
+    async updateProdQuantityToCart(idCart, idProd, quantity) {
             try {
               return await CartModel.findOneAndUpdate(
                 { _id: idCart, 'products.product': idProd },

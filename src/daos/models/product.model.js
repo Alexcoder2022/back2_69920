@@ -2,7 +2,7 @@ import mongoosePaginate from 'mongoose-paginate-v2';
 import { Schema, model} from 'mongoose';
 
 
-const productCollection = "product";
+const productCollection = "products";
 
 const productSchema = new Schema({
     title: { type: String, required:true},
@@ -13,6 +13,11 @@ const productSchema = new Schema({
     category: {type: String, required:true},
     thumbnails: {type: Array, require: false, default: []} 
 });
+/* 
+
+productSchema.pre("find", function() {
+    this.populate("products");
+}) */
 
 productSchema.plugin(mongoosePaginate);
 
