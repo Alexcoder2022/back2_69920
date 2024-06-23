@@ -3,9 +3,13 @@ import { ProductModel } from './models/product.model.js';
 
 export default class ProductDBManager{
 
-    async getAll() {
+    async getAll(page = 1, limit= 5, category, stock, sort ) {
         try {
-            const documents = await ProductModel.find({});
+            const filter = category ? { 'category': category } : {}; 
+            const fStock = stock ? { 'stock': stock} : {}; 
+            let sortOrder = {}; 
+            if(sort) sortOrder.price = sort === 'asc' ? 1 : sort === 'desc' ? -1 : null; 
+            const documents = await ProductModel.paginate(filter, fStock, {page, limit, sort: sortOrder});
             return documents;
         } catch (error) {
             throw new Error(error);

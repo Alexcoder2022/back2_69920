@@ -7,7 +7,6 @@ export default class CartDBManager{
     async getAll() {
         try {
             return await CartModel.find({});
-            
         } catch (error) {
             throw new Error(error);
         }
@@ -15,7 +14,9 @@ export default class CartDBManager{
 
     async getById(id) {
         try {
-            return await CartModel.findById(id); 
+            return await CartModel.findById(id). populate("products.product"); 
+            // le agregamos el populate e ingresamos a products.product 
+            // products: es el array y product es el id del producto
         
         } catch (error) {
             throw new Error(error);

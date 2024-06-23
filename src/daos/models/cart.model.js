@@ -3,7 +3,7 @@ import { Schema, model} from 'mongoose';
 const cartCollection = "cart";
 
 export const cartSchema = new Schema({
-    products: [
+    products: [  
       {_id: false, 
         quantity: {type: Number, default: 1 },
         product: {
@@ -13,5 +13,7 @@ export const cartSchema = new Schema({
       }
     ]
   });
+
+  
 
 export const CartModel = model("cart", cartSchema);

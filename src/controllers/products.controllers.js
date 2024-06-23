@@ -4,9 +4,23 @@ import * as service from '../services/product.services.js';
 
 export const getAll = async(req, res,next)=>{
     try { 
-        const { limit } = req.query;
-        const products = await service.getAll(limit);
-        res.status(200).json(products);    
+        const { page, limit, category, stock, sort } = req.query;  
+        const products = await service.getAll(page, limit, category, stock, sort);
+        const nextLink = products.hasNextPage ? `http://localhost:8085/api/products?page=${products.nextPage}`: null;
+        const prevLink = products.hasPrevPage ? `http://localhost:8085/api/products?page=${products.prevPage}`: null;
+        res.status(200).json({
+            status: 'success',
+            payload: products.docs,
+            totalDocs: products.totalDocs,
+            totalPages: products.totalpages,
+            nextPage: products.nextPage,
+            prevPage: products.prevPage,
+            page: products.page,
+            hasNextPage: products.hasNextPage,
+            hasPrevPage: products.hasPrevPage,
+            prevLink,
+            nextLink
+        });    
     } catch (error) {
         next(error);
     }

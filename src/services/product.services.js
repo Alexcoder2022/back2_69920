@@ -1,22 +1,19 @@
-// se llama al dao con sus metodos, es una capa mas que esta entre el dao y el controllers 
-//en los daos van ñas operaciones que se ralizan directamente en la base de datos los métodos del CRUD, LOS METODOS DE MONGOOSE 
-//aca en el servicio llamamos a los métodos del daos y devolvemos sus respuestas 
-//en el controllers manajamos el reques, los datos que nos llegan del usuario y el response que le devolvemos al usuario 
 
-/* import ProductDBManager from '../daos/productDBManager.js';
-const productDao = new ProductDBManager(); */
+
+import ProductDBManager from '../daos/productDBManager.js';
+const productDao = new ProductDBManager();
 
 //para utilizar FS: la instancia de  la clase de FS se va a llamar del = q la inst de la clase de MDB
-import {__dirname } from '../path.js';
+/* import {__dirname } from '../path.js';
 
 import ProductsManager from '../daos/productFSManager.js'; //dao de FS productManager  
 
-const productDao = new ProductsManager(`${__dirname}/data/products.json`);
+const productDao = new ProductsManager(`${__dirname}/data/products.json`); */
 
 
-export const getAll = async () =>{
+export const getAll = async (page, limit, category, stock, sort) =>{
     try {
-        return await productDao.getAll();
+        return await productDao.getAll(page, limit, category, stock, sort);
     } catch (error) {
         throw new Error (error); 
     }
