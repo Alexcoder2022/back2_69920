@@ -1,3 +1,8 @@
+http://localhost:8085/realTimeProducts
+http://localhost:8085/products
+
+
+
 ✔️ ORDENAMIENTO ASCENDENTE Y DESCENDENTE     
 localhost:8085/api/products?sort=asc
 localhost:8085/api/products?sort=desc
@@ -28,7 +33,14 @@ BUSCAR CARRITO POR ID:   router.get ("/:id", controllers.getById );
     
 PUT: 
 router.put("/:id", controllers.update);
-❌  http://localhost:8085/api/carts/667857c75b4e3131ada682f6   
+✔️  http://localhost:8085/api/carts/667857c75b4e3131ada682f6  
+    {
+     "products": [
+     {
+      "quantity": 10,
+      "product": "66773f6c2c997f443c70b75e"
+     }]
+    } 
 
 AGREGAR QUANTITY POR BODY: router.put("/:idCart/products/:idProd", controllers.updateProdQuantityToCart);
 ✔️  http://localhost:8085/api/carts/667857c75b4e3131ada682f6/products/66773f6c2c997f443c70b75e

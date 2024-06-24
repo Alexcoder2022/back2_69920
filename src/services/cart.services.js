@@ -84,12 +84,9 @@ export const removeProductToCart = async (idCart, idProd) =>{
     try {
         const cartExist = await getById(idCart);
         if (!cartExist) return null;
-
         const existProdInCart = await cartDao.existProdInCart(idCart, idProd);
         console.log(existProdInCart);
         if (!existProdInCart) return null;
-          
-        
         return await cartDao.removeProductToCart(idCart, idProd);
     }catch (error){
         throw new Error(error);
@@ -113,7 +110,7 @@ export const clearCart = async (idCart) => {
     try {
       const existCart = await getById(idCart);
       if (!existCart) return null;
-      return await cartDao.clearCart(idCart)
+      return await cartDao.clearCart(idCart);
     } catch (error) {
       console.log(error);
     }
