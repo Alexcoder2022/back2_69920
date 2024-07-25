@@ -55,8 +55,8 @@ export const remove = async (req, res, next) => {
       const { idCart } = req.params;
       const { idProd } = req.params;
       const newProdToCart = await service.saveProductToCart(idCart, idProd);
-      if (!newProdToCart) res.json({ msg: "Error save product to cart" });
-      else res.json(newProdToCart);
+      if (!newProdToCart) res.status(404).json({ msg: "Error save product to cart" });
+      else res.status(200).json(newProdToCart);
     } catch (error) {
       next(error.message);
     }
